@@ -24,8 +24,8 @@ int Shell::com_cd(vector<string>& argv) {
 
 
 int Shell::com_pwd(vector<string>& argv) {
-  // TODO: YOUR CODE GOES HERE
-  cout << "pwd called" << endl; // delete when implemented
+  // Implemented
+  system("echo $PWD");
   return 0;
 }
 
