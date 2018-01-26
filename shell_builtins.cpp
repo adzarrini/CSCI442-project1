@@ -46,7 +46,12 @@ int Shell::com_unalias(vector<string>& argv) {
 
 int Shell::com_echo(vector<string>& argv) {
   // TODO: YOUR CODE GOES HERE
-  cout << "echo called" << endl; // delete when implemented
+  
+  for (unsigned int i = 1; i < argv.size(); i++) {
+	cout << argv[i] + " ";
+  }
+  cout << endl;
+
   return 0;
 }
 
