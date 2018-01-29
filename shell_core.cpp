@@ -75,7 +75,13 @@ int Shell::loop_and_handle_input() {
 
 string Shell::get_prompt(int return_value) {
   // TODO: YOUR CODE GOES HERE
-  return "prompt > "; // replace with your own code
+  string userName = getenv("USER");
+  string indicator = ":)";
+  if (return_value != 0) {
+    indicator = ":(";
+  }
+
+  return userName + " " + indicator + " $ ";
 }
 
 

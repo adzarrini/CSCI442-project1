@@ -11,7 +11,12 @@ using namespace std;
 
 int Shell::com_ls(vector<string>& argv) {
   // TODO: YOUR CODE GOES HERE
-  cout << "ls called" << endl; // delete when implemented
+  //cout << "ls called" << endl; // delete when implemented
+  
+  if (argv.size() <= 1) {
+    system("ls");
+  }
+  
   return 0;
 }
 
@@ -25,6 +30,8 @@ int Shell::com_cd(vector<string>& argv) {
 
 int Shell::com_pwd(vector<string>& argv) {
   // Implemented
+  
+  if (argv.size() > 1) return -1;
   system("echo $PWD");
   return 0;
 }
