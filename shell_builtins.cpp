@@ -5,6 +5,9 @@
 
 #include "shell.h"
 #include <iostream>
+#include <string>
+#include <dirent.h>
+
 
 using namespace std;
 
@@ -13,10 +16,37 @@ int Shell::com_ls(vector<string>& argv) {
   // TODO: YOUR CODE GOES HERE
   //cout << "ls called" << endl; // delete when implemented
   
-  if (argv.size() <= 1) {
-    system("ls");
+  if(argv.size() > 2) {
+  	cerr << "Too many arguments" << endl;
+  	return -1;
   }
-  
+	
+	// if (!opendir(argv[1].c_str())) {
+	// 	cerr << "Directory not found" << endl;
+	// 	return -1;
+	// }
+
+	DIR *dir;
+	struct dirent *direct;
+
+	if (argv.size() == 1) {
+		dir = opendir("./");
+	}
+	else {
+		dir = opendir(argv[1].c_str());
+	}
+
+	if (dir != NULL) {
+		while((direct = readdir(dir)) != NULL) {
+			printf("%s\n", direct->d_name);
+		}
+		closedir(dir);
+	}
+	else {
+		cerr << "Could not open directory" << endl;
+		return -1;
+	}
+
   return 0;
 }
 
@@ -31,7 +61,10 @@ int Shell::com_cd(vector<string>& argv) {
 int Shell::com_pwd(vector<string>& argv) {
   // Implemented
   
-  if (argv.size() > 1) return -1;
+  if (argv.size() > 1) {
+  	cerr << "Too many arguments" << endl;
+  	return -1;
+  }
   system("echo $PWD");
   return 0;
 }
