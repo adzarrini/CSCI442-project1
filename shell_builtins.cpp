@@ -41,6 +41,7 @@ int Shell::com_ls(vector<string>& argv) {
 	else {
 		string message = argv[0] + ": cannot access '" + argv[1] + "'";
 		perror(message.c_str());
+		return -1; // Why do I need this for the tests to pass
 		exit(-1);
 	}
 
@@ -50,6 +51,7 @@ int Shell::com_ls(vector<string>& argv) {
 
 int Shell::com_cd(vector<string>& argv) {
   // Implemented
+
 	int returnVal = chdir(getenv("HOME"));;
 
   if(argv.size() > 2) {
@@ -65,7 +67,6 @@ int Shell::com_cd(vector<string>& argv) {
 		exit(-1);
 	}
 
-  
   return returnVal;
 }
 
@@ -84,20 +85,55 @@ int Shell::com_pwd(vector<string>& argv) {
 
 int Shell::com_alias(vector<string>& argv) {
   // TODO: YOUR CODE GOES HERE
-  cout << "alias called" << endl; // delete when implemented
+  // cout << "alias called" << endl; // delete when implemented
+  if(argv.size() > 2) {
+  	cerr << "Too many arguments" << endl;
+  	return -1;
+  }
+  if(argv.size() == 1) {
+  	for(pair<string, string> p : aliases) {
+  		cout << "alias " << p.first << "=" << p.second << endl;
+  	}
+  }
+  else {
+  	string temp = argv[1];
+  	size_t index = 0;
+  	if ((index = temp.find("=")) == string::npos) {
+  		cerr << "Invalid format" << endl;
+  		return -1;
+  	}
+
+  	string key = temp.substr(0,index);
+  	string val = temp.substr(++index, temp.size());
+  	aliases[key] = val;
+  }
+
   return 0;
 }
 
 
 int Shell::com_unalias(vector<string>& argv) {
-  // TODO: YOUR CODE GOES HERE
-  cout << "unalias called" << endl; // delete when implemented
+  // Implemented
+  
+  if (argv.size() != 2) {
+  	cerr << "unalias: usage: unalias [-a] name [name ...]" << endl;
+  	return -1;
+  }
+  if (argv[1] == "-a") {
+  	aliases.clear();
+  	return 0;
+  }
+  if (aliases.erase(argv[1]) == 0) {
+  	cerr << "bash: unalias: " << argv[1] << ": not found" << endl;
+  	return -1;
+  }
+
   return 0;
 }
 
 
 int Shell::com_echo(vector<string>& argv) {
-  // TODO: YOUR CODE GOES HERE
+  // Implemented
   
   for (unsigned int i = 1; i < argv.size(); i++) {
 	cout << argv[i] + " ";
