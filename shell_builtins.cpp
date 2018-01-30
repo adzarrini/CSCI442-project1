@@ -6,25 +6,21 @@
 #include "shell.h"
 #include <iostream>
 #include <string>
+#include <stdio.h>
 #include <dirent.h>
+#include <unistd.h>
 
 
 using namespace std;
 
 
 int Shell::com_ls(vector<string>& argv) {
-  // TODO: YOUR CODE GOES HERE
-  //cout << "ls called" << endl; // delete when implemented
+	// Implemented
   
   if(argv.size() > 2) {
   	cerr << "Too many arguments" << endl;
   	return -1;
   }
-	
-	// if (!opendir(argv[1].c_str())) {
-	// 	cerr << "Directory not found" << endl;
-	// 	return -1;
-	// }
 
 	DIR *dir;
 	struct dirent *direct;
@@ -43,8 +39,9 @@ int Shell::com_ls(vector<string>& argv) {
 		closedir(dir);
 	}
 	else {
-		cerr << "Could not open directory" << endl;
-		return -1;
+		string message = argv[0] + ": cannot access '" + argv[1] + "'";
+		perror(message.c_str());
+		exit(-1);
 	}
 
   return 0;
@@ -52,9 +49,24 @@ int Shell::com_ls(vector<string>& argv) {
 
 
 int Shell::com_cd(vector<string>& argv) {
-  // TODO: YOUR CODE GOES HERE
-  cout << "cd called" << endl; // delete when implemented
-  return 0;
+  // Implemented
+	int returnVal = chdir(getenv("HOME"));;
+
+  if(argv.size() > 2) {
+  	cerr << "Too many arguments" << endl;
+  	return -1;
+  }
+  if (argv.size() == 2) {
+		returnVal = chdir(argv[1].c_str());
+	}
+	if (returnVal != 0) {
+		string message = "bash: " + argv[0] + " " + argv[1];
+		perror(message.c_str());
+		exit(-1);
+	}
+
+  
+  return returnVal;
 }
 
 
