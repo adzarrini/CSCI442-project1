@@ -9,7 +9,8 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <unistd.h>
-
+#include <readline/readline.h>
+#include <readline/history.h>
 
 using namespace std;
 
@@ -41,8 +42,7 @@ int Shell::com_ls(vector<string>& argv) {
 	else {
 		string message = argv[0] + ": cannot access '" + argv[1] + "'";
 		perror(message.c_str());
-		return -1; // Why do I need this for the tests to pass
-		exit(-1);
+		return -1; 
 	}
 
   return 0;
@@ -64,7 +64,6 @@ int Shell::com_cd(vector<string>& argv) {
 	if (returnVal != 0) {
 		string message = "bash: " + argv[0] + " " + argv[1];
 		perror(message.c_str());
-		exit(-1);
 	}
 
   return returnVal;
@@ -114,7 +113,7 @@ int Shell::com_alias(vector<string>& argv) {
 
 int Shell::com_unalias(vector<string>& argv) {
   // Implemented
-  
+
   if (argv.size() != 2) {
   	cerr << "unalias: usage: unalias [-a] name [name ...]" << endl;
   	return -1;
@@ -145,14 +144,28 @@ int Shell::com_echo(vector<string>& argv) {
 
 
 int Shell::com_history(vector<string>& argv) {
-  // TODO: YOUR CODE GOES HERE
-  cout << "history called" << endl; // delete when implemented
+  // Implemented
+  
+  if (argv.size() > 1) {
+  	cerr << "Too many arguments" << endl;
+  	return -1;
+  }
+
+  register HIST_ENTRY **histList = history_list();
+  if(histList) {
+  	for(int i = 0; histList[i]; i++) {
+  		printf("%d: %s\n", i + history_base, histList[i]->line);
+  	}
+  }
+  
+
   return 0;
 }
 
 
 int Shell::com_exit(vector<string>& argv) {
   // Implemented
+
   exit(0);
   return 0;
 }
