@@ -17,7 +17,6 @@ using namespace std;
 
 int Shell::com_ls(vector<string>& argv) {
 	// Implemented
-  
   if(argv.size() > 2) {
   	cerr << "Too many arguments" << endl;
   	return -1;
@@ -83,8 +82,8 @@ int Shell::com_pwd(vector<string>& argv) {
 
 
 int Shell::com_alias(vector<string>& argv) {
-  // TODO: YOUR CODE GOES HERE
-  // cout << "alias called" << endl; // delete when implemented
+  // Implemented
+
   if(argv.size() > 2) {
   	cerr << "Too many arguments" << endl;
   	return -1;

@@ -89,7 +89,7 @@ int Shell::execute_line(char* line) {
   // TODO: expand the command from history using !!, !-N, etc
   // HINT: leverage readline! This should only be a couple lines of code.
 
-  // TODO: save the command to history (again, leverage readline!)
+  // Completed // TODO: save the command to history (again, leverage readline!)
   add_history(line);
 
   // Tokenize the input string.
@@ -153,7 +153,14 @@ void Shell::local_variable_assignment(vector<string>& tokens) {
 
 
 void Shell::alias_substitution(vector<string>& tokens) {
-  // TODO: implement alias handling
+  // Implemented
+  vector<string>::iterator token = tokens.begin();
+
+  for (map<string,string>::iterator alias = aliases.begin(); alias != aliases.end(); ++alias) {
+    if (*token == alias->first) {
+      *token = alias->second;
+    }
+  }
 }
 
 
