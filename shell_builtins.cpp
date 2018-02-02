@@ -132,7 +132,7 @@ int Shell::com_unalias(vector<string>& argv) {
 
 int Shell::com_echo(vector<string>& argv) {
   // Implemented
-  
+
   for (unsigned int i = 1; i < argv.size(); i++) {
 	cout << argv[i] + " ";
   }
@@ -156,8 +156,6 @@ int Shell::com_history(vector<string>& argv) {
   		printf("%d: %s\n", i + history_base, histList[i]->line);
   	}
   }
-  
-
   return 0;
 }
 

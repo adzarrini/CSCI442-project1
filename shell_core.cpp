@@ -86,15 +86,31 @@ string Shell::get_prompt(int return_value) {
 
 
 int Shell::execute_line(char* line) {
-  // TODO: expand the command from history using !!, !-N, etc
+  // Implemented //TODO: expand the command from history using !!, !-N, etc
   // HINT: leverage readline! This should only be a couple lines of code.
+  // Taken directly from : http://cnswww.cns.cwru.edu/php/chet/readline/history.html
+  char* expansion;
+  int result;
+
+  result = history_expand(line, &expansion);
+  if(result) {
+    fprintf(stderr, "%s\n", expansion);
+  }
+  if(result < 0 || result == 2) {
+    free(expansion);
+    return -1;
+  }
+  // add_history(expansion);
+  //strncpy(line, expansion, sizeof(line)-1);
 
   // Completed // TODO: save the command to history (again, leverage readline!)
-  add_history(line);
+  add_history(expansion);
 
   // Tokenize the input string.
-  vector<string> tokens = tokenize_input(line);
-
+  vector<string> tokens = tokenize_input(expansion); // Changed "line" to "expansion". 
+  // There was an issue with the strncpy and therefore the expansions do not tokenize properly
+  free(expansion); // deallocates memory for expansion
+  
   // Handle local variable declarations.
   local_variable_assignment(tokens);
 
