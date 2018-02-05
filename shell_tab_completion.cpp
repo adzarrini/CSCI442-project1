@@ -13,6 +13,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#include <string>
+
 using namespace std;
 
 
@@ -23,6 +25,20 @@ void Shell::get_env_completions(const char* text, vector<string>& matches) {
 
 void Shell::get_command_completions(const char* text, vector<string>& matches) {
   // TODO: implement
+  
+  map<string, builtin_t>::iterator builtin;
+  for (builtin = builtins.begin(); builtin != builtins.end(); ++builtin) {
+    if ((builtin->first).find((string) text) != string::npos) {
+      matches.push_back(builtin->first);
+    }
+  }
+  map<string, string>::iterator alias;
+  for (alias = aliases.begin(); alias != aliases.end(); ++alias) {
+    if ((alias->first).find((string) text)!= string::npos) {
+      matches.push_back(alias->first);
+    }
+  }
+
 }
 
 
