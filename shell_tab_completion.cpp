@@ -20,25 +20,48 @@ using namespace std;
 
 void Shell::get_env_completions(const char* text, vector<string>& matches) {
   // TODO: implement
+
+  char** env = environ;
+  // Iterate through env make sure it is not null
+  while(*env != NULL) {
+    string temp = (string) *env;
+    size_t pos = temp.find("=");
+    string look = "$" + temp.substr(0, pos);
+    // find where = and append $ to substring. Check it it equals text 
+    if(look.find((string) text) == 0) {
+      matches.push_back(look);
+    }
+    ++env;
+  }
+
+  // Iterate through local vars but append $ to string before comparing to text
+  map<string, string>::iterator lvars;
+  for (lvars = localvars.begin(); lvars != localvars.end(); ++lvars) {
+    string look = "$" + (lvars->first);
+    if (look.find((string) text) == 0) {
+      matches.push_back(look);
+    }
+  }
 }
 
 
 void Shell::get_command_completions(const char* text, vector<string>& matches) {
   // TODO: implement
-  
+
+  // Iterate through builtins and see if text contains any of the keys
   map<string, builtin_t>::iterator builtin;
   for (builtin = builtins.begin(); builtin != builtins.end(); ++builtin) {
-    if ((builtin->first).find((string) text) != string::npos) {
+    if ((builtin->first).find((string) text) == 0) {
       matches.push_back(builtin->first);
     }
   }
+  // Iterate through alias and see if text contains any of the keys
   map<string, string>::iterator alias;
   for (alias = aliases.begin(); alias != aliases.end(); ++alias) {
-    if ((alias->first).find((string) text)!= string::npos) {
+    if ((alias->first).find((string) text) == 0) {
       matches.push_back(alias->first);
     }
   }
-
 }
 
 
