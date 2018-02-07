@@ -8,3 +8,7 @@ Your final submission must contain a README file with the following:
  * Hours Spent: 8 hrs
 
  * remark: I collborated with others on this project and I used resources I found on Google. 
+
+# Graded 
+	* Deliverable 1: 20/20 
+
