@@ -13,7 +13,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include <string>
+#include <dirent.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -21,27 +22,11 @@ using namespace std;
 void Shell::get_env_completions(const char* text, vector<string>& matches) {
   // TODO: implement
 
-  char** env = environ;
-  // Iterate through env make sure it is not null
-  while(*env != NULL) {
-    string temp = (string) *env;
-    size_t pos = temp.find("=");
-    string look = "$" + temp.substr(0, pos);
-    // find where = and append $ to substring. Check it it equals text 
-    if(look.find((string) text) == 0) {
-      matches.push_back(look);
-    }
-    ++env;
-  }
-
+  // ENV tab completions
+  get_ENV_completions(text, matches);
   // Iterate through local vars but append $ to string before comparing to text
-  map<string, string>::iterator lvars;
-  for (lvars = localvars.begin(); lvars != localvars.end(); ++lvars) {
-    string look = "$" + (lvars->first);
-    if (look.find((string) text) == 0) {
-      matches.push_back(look);
-    }
-  }
+  get_local_completions(text, matches);
+
 }
 
 
@@ -49,19 +34,12 @@ void Shell::get_command_completions(const char* text, vector<string>& matches) {
   // TODO: implement
 
   // Iterate through builtins and see if text contains any of the keys
-  map<string, builtin_t>::iterator builtin;
-  for (builtin = builtins.begin(); builtin != builtins.end(); ++builtin) {
-    if ((builtin->first).find((string) text) == 0) {
-      matches.push_back(builtin->first);
-    }
-  }
+  get_builtin_completions(text, matches);
   // Iterate through alias and see if text contains any of the keys
-  map<string, string>::iterator alias;
-  for (alias = aliases.begin(); alias != aliases.end(); ++alias) {
-    if ((alias->first).find((string) text) == 0) {
-      matches.push_back(alias->first);
-    }
-  }
+  get_alias_completions(text, matches);
+  // External commands
+  get_external_completions(text,matches);
+
 }
 
 
@@ -128,4 +106,67 @@ char* Shell::pop_match(vector<string>& matches) {
 
   // No more matches.
   return NULL;
+}
+
+// Helper functions
+void Shell::get_ENV_completions(const char* text, vector<string>& matches) {
+  char** env = environ;
+  // Iterate through env make sure it is not null
+  while(*env != NULL) {
+    string temp = (string) *env;
+    size_t pos = temp.find("=");
+    string look = "$" + temp.substr(0, pos);
+    // find where = and append $ to substring. Check it it equals text 
+    if(look.find((string) text) == 0) {
+      matches.push_back(look);
+    }
+    ++env;
+  }
+}
+
+void Shell::get_local_completions(const char* text, vector<string>& matches) {
+  map<string, string>::iterator lvars;
+  for (lvars = localvars.begin(); lvars != localvars.end(); ++lvars) {
+    string look = "$" + (lvars->first);
+    if (look.find((string) text) == 0) {
+      matches.push_back(look);
+    }
+  }
+}
+
+void Shell::get_builtin_completions(const char* text, vector<string>& matches){
+  map<string, builtin_t>::iterator builtin;
+  for (builtin = builtins.begin(); builtin != builtins.end(); ++builtin) {
+    if ((builtin->first).find((string) text) == 0) {
+      matches.push_back(builtin->first);
+    }
+  }
+}
+
+void Shell::get_alias_completions(const char* text, vector<string>& matches) {
+  map<string, string>::iterator alias;
+  for (alias = aliases.begin(); alias != aliases.end(); ++alias) {
+    if ((alias->first).find((string) text) == 0) {
+      matches.push_back(alias->first);
+    }
+  }
+}
+
+void Shell::get_external_completions(const char* text, vector<string>& matches) {
+  DIR *dir;
+  struct dirent *direct;
+  string path = getenv("PATH");
+  size_t pos;
+  while((pos = path.find(":")) != string::npos) {
+    if ((dir = opendir(path.substr(0, pos).c_str())) != NULL) {
+      while((direct = readdir(dir)) != NULL) {
+        string look = direct->d_name;
+        if(look == "." || look == "..") continue;
+        if(look.find((string) text) == 0) {
+          matches.push_back(look);
+        }
+      }
+    }
+    path.erase(0,pos+1);
+  }
 }

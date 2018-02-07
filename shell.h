@@ -277,6 +277,13 @@ private:
    */
   static char* pop_match(std::vector<std::string>& matches);
 
+  // Helper functions for cleaner code
+  void get_ENV_completions(const char* text, std::vector<std::string>& matches);
+  void get_local_completions(const char* text, std::vector<std::string>& matches);
+  void get_builtin_completions(const char* text, std::vector<std::string>& matches);
+  void get_alias_completions(const char* text, std::vector<std::string>& matches);
+  void get_external_completions(const char* text, std::vector<std::string>& matches);
+
 // EXTERNAL COMMAND EXECUTION (shell_cmd_execution.cpp)
 private:
 
