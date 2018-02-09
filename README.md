@@ -13,3 +13,7 @@ Your final submission must contain a README file with the following:
  * remark: I collborated with others on this project and I used resources I found on Google.
  * I've left some notes on shell_cmd_executions. I'm seeing some odd behavior that I'm not sure about.
  * Current configuration set to pass tests.  
+
+# Graded
+
+   * Deliverable 2: 20/20
