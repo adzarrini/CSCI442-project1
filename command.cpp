@@ -96,7 +96,6 @@ bool invalid_next(string cmd) {
 }
 
 
-
 // Feel free to ignore everything below here. It's just code to allow you to
 // cout a command in a nice, pretty format. =)
 

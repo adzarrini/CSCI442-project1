@@ -64,6 +64,19 @@ struct command_t {
    * WRITE_TO_STDOUT, respectively.
    */
   command_t() : input_type(READ_FROM_STDIN), output_type(WRITE_TO_STDOUT) {}
+
+  /**
+  * Takes the argv vector and turns it into a cstring for later use
+  *
+  */
+  std::vector<char*> get_cstring_argv() {
+    std::vector<char*> cargv;
+    for (size_t i = 0; i < argv.size(); i++) {
+      cargv.push_back((char*) argv[i].c_str());
+    }
+    cargv.push_back(NULL);
+    return cargv;
+  }
 };
 
 
@@ -86,3 +99,5 @@ bool invalid_next(std::string cmd);
  * Enable the output operator (<<) to output commands in a readable format.
  */
 std::ostream& operator <<(std::ostream& out, const command_t& command);
+
+

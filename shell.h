@@ -31,6 +31,8 @@
 #include <string>
 #include <vector>
 
+#include "command.h"
+
 
 /**
  * An external reference to the execution environment (ENV vars). For more info,
@@ -298,6 +300,12 @@ private:
    * @return The return code of the operation
    */
   int execute_external_command(std::vector<std::string>& argv);
+
+  // Called when the forking process for child is still going.
+  // 
+  int wait_child_process(command_t& cmd, int pipeIn[2], int pipeOut[2]);
+
+  void execute_child_process(command_t& cmd, int pipeIn[2], int pipeOut[2]);
 
 // CONSTANTS AND MEMBERS (shell_core.cpp)
 private:
