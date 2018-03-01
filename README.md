@@ -21,3 +21,8 @@ Your final submission must contain a README file with the following:
 
  * remark: I collborated with others on this project and I used resources I found on Google.
  * The career day session with Josh was crucial for completing the final deliverable.
+
+
+# Graded
+ * Score tag final: 160/160
+ * Score total: 200/200
